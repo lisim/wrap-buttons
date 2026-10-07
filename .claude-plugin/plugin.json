@@ -1,0 +1,21 @@
+{
+  "name": "wrap-buttons",
+  "version": "0.1.0",
+  "description": "After a wrap-up reply, shows buttons to /clear and carry the handoff's next step into a fresh session.",
+  "author": { "name": "Pete" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "marker": {
+      "type": "string",
+      "title": "Wrap-up marker",
+      "description": "Text in a reply that means the wrap-up is done; the reply from it on is the handoff carried over.",
+      "default": "Session Handoff Card"
+    },
+    "nextLabel": {
+      "type": "string",
+      "title": "Next step label",
+      "description": "Label of the handoff line holding the next step, e.g. 'Next Up' in '- **Next Up**: ...'.",
+      "default": "Next Up"
+    }
+  }
+}

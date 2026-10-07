@@ -1,0 +1,13 @@
+{
+  "name": "wrap-buttons",
+  "owner": {
+    "name": "Pete"
+  },
+  "plugins": [
+    {
+      "name": "wrap-buttons",
+      "source": "./"
+    }
+  ],
+  "description": "Buttons to clear and carry your handoff into a fresh Claude Code session after a wrap-up."
+}

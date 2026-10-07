@@ -33,20 +33,20 @@ export const register: Register = (on, options) => {
     // Border colour per button: green the suggested one, blue Stay, the rest the default.
     return (
       <Box flexDirection="column" borderStyle="round" paddingX={1}>
-        <Text bold>✅ Wrap-up done · press 1-4</Text>
+        <Text bold>✅ Wrap-up done. Start a fresh session? Press 1-4</Text>
         {card.next ? <Text>{`${nextLabel}: ${card.next.slice(0, 100)}`}</Text> : null}
         <Box gap={1}>
           <Box key="b-start" borderStyle="round" borderColor="green" paddingX={1}>
-            <Button key="start" hotkey="1" plain label="Start next" onPress={() => reset($, 'start', nextLabel)} />
+            <Button key="start" hotkey="1" plain label={`Clear & send ${nextLabel}`} onPress={() => reset($, 'start', nextLabel)} />
           </Box>
           <Box key="b-prefill" borderStyle="round" paddingX={1}>
-            <Button key="prefill" hotkey="2" plain label="Prefill next" onPress={() => reset($, 'prefill', nextLabel)} />
+            <Button key="prefill" hotkey="2" plain label={`Clear & draft ${nextLabel}`} onPress={() => reset($, 'prefill', nextLabel)} />
           </Box>
           <Box key="b-blank" borderStyle="round" paddingX={1}>
-            <Button key="blank" hotkey="3" plain label="Blank slate" onPress={() => reset($, 'none', nextLabel)} />
+            <Button key="blank" hotkey="3" plain label="Clear only" onPress={() => reset($, 'none', nextLabel)} />
           </Box>
           <Box key="b-stay" borderStyle="round" borderColor="blue" paddingX={1}>
-            <Button key="stay" hotkey="4" plain label="Stay" onPress={() => update($, handoff, () => null)} />
+            <Button key="stay" hotkey="4" plain label="Stay here" onPress={() => update($, handoff, () => null)} />
           </Box>
         </Box>
       </Box>

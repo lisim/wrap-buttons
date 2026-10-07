@@ -3,21 +3,21 @@
 A Claude Code mod. When a reply contains your wrap-up / handoff card, a band appears above the prompt:
 
 ```
-╭──────────────────────────────────────────────────────────────╮
-│ ✅ Wrap-up done · press 1-4                                  │
-│ Next Up: push the repo                                       │
-│ ╭─────────────╮ ╭───────────────╮ ╭──────────────╮ ╭───────╮ │
-│ │1: Start next│ │2: Prefill next│ │3: Blank slate│ │4: Stay│ │
-│ ╰─────────────╯ ╰───────────────╯ ╰──────────────╯ ╰───────╯ │
-╰──────────────────────────────────────────────────────────────╯
+╭────────────────────────────────────────────────────────────────────────────────────────╮
+│ ✅ Wrap-up done. Start a fresh session? Press 1-4                                      │
+│ Next Up: push the repo                                                                 │
+│ ╭────────────────────────╮ ╭─────────────────────────╮ ╭─────────────╮ ╭────────────╮ │
+│ │1: Clear & send Next Up │ │2: Clear & draft Next Up │ │3: Clear only│ │4: Stay here│ │
+│ ╰────────────────────────╯ ╰─────────────────────────╯ ╰─────────────╯ ╰────────────╯ │
+╰────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 | Key | Does |
 |---|---|
-| **1 Start next** (green) | `/clear`, then sends the handoff + next step as the first message of the fresh session |
-| **2 Prefill next** | `/clear`, then puts the handoff + next step in the prompt box to edit |
-| **3 Blank slate** | `/clear`, nothing carried over |
-| **4 Stay** (blue) | Hide the band, keep the session |
+| **1 Clear & send** (green) | `/clear`, then sends the handoff + next step as the first message of the fresh session, so Claude starts on it straight away |
+| **2 Clear & draft** | `/clear`, then puts the handoff + next step in the prompt box for you to edit and send |
+| **3 Clear only** | `/clear`, nothing carried over |
+| **4 Stay here** (blue) | Hide the band, keep the session |
 
 Type the digit into an empty prompt, or click.
 

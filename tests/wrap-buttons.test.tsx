@@ -22,6 +22,12 @@ test('parses the card and its next step', async () => {
   expect(parseHandoff('no card here', 'Session Handoff Card', 'Next Up')).toBe(null)
 })
 
+test('matches the marker only on a heading line', async () => {
+  const mention = 'The band reads the Session Handoff Card.\n- **Next Up**: nothing'
+  expect(parseHandoff(mention, 'Session Handoff Card', 'Next Up')).toBe(null)
+  expect(parseHandoff(`${mention}\n\n${CARD}`, 'Session Handoff Card', 'Next Up')?.next).toBe('push the repo')
+})
+
 for (const surface of ['terminal', 'desktop'] as const) {
   test(`${surface}: buttons appear after a wrap-up, and Prefill clears then fills`, async ($, on) => {
     const ran: string[] = []

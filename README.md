@@ -23,11 +23,12 @@ Type the digit into an empty prompt, or click.
 
 ## Install
 
-```
-/plugin install wrap-buttons --marketplace lisim/wrap-buttons
+```sh
+claude plugin marketplace add lisim/wrap-buttons
+claude plugin install wrap-buttons@wrap-buttons
 ```
 
-Answer `y` to add the marketplace, pick a scope, then set the two options (or keep the defaults).
+Restart Claude Code after installing. The two options below are optional and use their defaults until set; change them with `/plugin configure wrap-buttons` in Claude Code.
 
 ## Options
 

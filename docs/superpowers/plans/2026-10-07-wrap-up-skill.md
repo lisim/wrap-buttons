@@ -128,9 +128,10 @@ function world(on: On, routines: string[], store: Record<string, unknown> = {}) 
     const { Box } = $e.ui.resolve(e)
     return <Box key="engine" />
   })
+  on('session.start', (_$, e) => ({ cwd: e.cwd }))
   mock.store(on, store)
   mock.env(on, { HOME: '/home/u' })
-  on('fs.exists', (_$, e) => routines.includes(e.path))
+  on('fs.exists', (_$, e) => ({ value: routines.includes(e.path) }))
   on('command.run', (_$, e) => {
     ran.push(`${e.command} ${e.args}`)
     return { text: '' }
@@ -171,7 +172,7 @@ for (const surface of ['terminal', 'desktop'] as const) {
 const HIDDEN: [string, string[], Record<string, unknown>, boolean][] = [
   ['already prompted', [], { setupPrompted: true }, true],
   ['global routine exists', ['/home/u/.claude/wrap-up.md'], {}, true],
-  ['project routine exists', ['.claude/wrap-up.md'], {}, true],
+  ['project routine exists', ['/proj/.claude/wrap-up.md'], {}, true],
   ['not interactive', [], {}, false],
 ]
 for (const [why, routines, store, isInteractive] of HIDDEN) {
@@ -195,9 +196,9 @@ Expected: FAIL on the two `setup band shows once` / `At end of session` tests (0
 const setupBand = atom({ plugin: 'wrap-buttons', key: 'setupBand' } as const, false)
 
 // A routine in the project or the home folder means setup is done.
-async function hasRoutine($: EngineInterface) {
+async function hasRoutine($: EngineInterface, cwd: string) {
   const home = await $.env.get('HOME')
-  for (const path of ['.claude/wrap-up.md', ...(home ? [`${home}/.claude/wrap-up.md`] : [])])
+  for (const path of [`${cwd}/.claude/wrap-up.md`, ...(home ? [`${home}/.claude/wrap-up.md`] : [])])
     if (await $.fs.exists(path)) return true
   return false
 }

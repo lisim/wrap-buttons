@@ -63,7 +63,7 @@ export const register: Register = (on, options) => {
               <Button key="setup-now" hotkey="1" plain label="Set up now" onPress={() => closeSetup($, true)} />
             </Box>
             <Box key="b-setup-later" borderStyle="round" borderColor="blue" paddingX={1}>
-              <Button key="setup-later" hotkey="2" plain label="At end of session" onPress={() => closeSetup($, false)} />
+              <Button key="setup-later" hotkey="2" plain label="Later / I have my own" onPress={() => closeSetup($, false)} />
             </Box>
           </Box>
         </Box>

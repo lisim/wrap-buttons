@@ -98,7 +98,7 @@ for (const surface of ['terminal', 'desktop'] as const) {
     expect(await again.find({ key: 'setup-now' })).toBe(undefined)
   })
 
-  test(`${surface}: At end of session hides the band and runs nothing`, async ($, on) => {
+  test(`${surface}: Later / I have my own hides the band and runs nothing`, async ($, on) => {
     const ran = world(on, [])
     await $.session.start({ cwd: '/proj', surface, isInteractive: true })
     const ui = await $.ui.mount({ plugin: 'wrap-buttons', surface, component: 'AbovePrompt', props: PROPS })

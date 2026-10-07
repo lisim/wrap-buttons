@@ -10,7 +10,7 @@ description: Wrap up the session with a handoff card (Completed, Files Touched, 
 Ask these one at a time, multiple choice where possible. Wait for each answer.
 
 1. **When**: Only when you ask, or should I also offer a wrap-up when a task looks done?
-2. **What to update**: List what exists in this project (`CHANGELOG.md`, `docs/`, a notes or daily-notes folder) and ask which to update at wrap-up. Accept other paths.
+2. **What to update**: List what exists in this project (`CHANGELOG.md`, `docs/`, a notes or daily-notes folder) and ask which to update at wrap-up. Also ask if they keep notes outside the project (e.g. an Obsidian vault or daily notes folder) and take the path. Accept other paths.
 3. **Git**: At wrap-up, do nothing, show `git status`, or commit?
 4. **Card**: The card always has Completed, Files Touched, Next Up. Any extra fields?
 5. **Where to save**: All projects (`~/.claude/wrap-up.md`) or just this one (`.claude/wrap-up.md`)?

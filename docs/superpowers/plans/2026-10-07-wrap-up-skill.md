@@ -25,12 +25,12 @@
 
 **Files:** Modify: `hooks/register.tsx` (already edited, uncommitted)
 
-- [ ] **Step 1: Run the tests**
+- [x] **Step 1: Run the tests**
 
 Run: `claude plugin test .`
 Expected: PASS (2 tests, terminal + desktop, plus the parser test)
 
-- [ ] **Step 2: Commit it alone**
+- [x] **Step 2: Commit it alone**
 
 ```bash
 git add hooks/register.tsx
@@ -48,7 +48,7 @@ git commit -m "Band: preview box for what 1/2 carry over"
 **Interfaces:**
 - Produces: `parseHandoff(answer, marker, nextLabel): Handoff | null` — unchanged signature; now `null` unless the marker is on a line starting with `#` (leading whitespace allowed).
 
-- [ ] **Step 1: Write the failing test** — append to `tests/wrap-buttons.test.tsx` after the existing parser test:
+- [x] **Step 1: Write the failing test** — append to `tests/wrap-buttons.test.tsx` after the existing parser test:
 
 ```tsx
 test('matches the marker only on a heading line', async () => {
@@ -58,12 +58,12 @@ test('matches the marker only on a heading line', async () => {
 })
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `claude plugin test .`
 Expected: FAIL on `matches the marker only on a heading line` (first assertion gets a Handoff, not null)
 
-- [ ] **Step 3: Implement** — replace the body of `parseHandoff` in `hooks/card.ts`:
+- [x] **Step 3: Implement** — replace the body of `parseHandoff` in `hooks/card.ts`:
 
 ```ts
 // The handoff from the marker's heading on, and its next-step line; null when no heading carries the marker.
@@ -79,12 +79,12 @@ export function parseHandoff(answer: string, marker: string, nextLabel: string):
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `claude plugin test .`
 Expected: PASS, all tests
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add hooks/card.ts tests/wrap-buttons.test.tsx
@@ -104,7 +104,7 @@ git commit -m "Match the wrap-up marker only on a heading line"
 - Consumes: `handoff` atom, `reset()` (existing, `hooks/register.tsx`)
 - Produces: atom `setupBand` (`{ plugin: 'wrap-buttons', key: 'setupBand' }`, initial `false`); store key `setupPrompted: true`; Button keys `setup-now`, `setup-later`.
 
-- [ ] **Step 1: Declare the state** — `types/index.d.ts` becomes:
+- [x] **Step 1: Declare the state** — `types/index.d.ts` becomes:
 
 ```ts
 export type Handoff = { card: string; next: string }
@@ -116,7 +116,7 @@ declare module 'claude-code' {
 }
 ```
 
-- [ ] **Step 2: Write the failing tests** — change the imports to `import type { On, RenderPropsOf } from 'claude-code'` and `import { expect, mock, test } from 'claude-code/testing'`, then append:
+- [x] **Step 2: Write the failing tests** — change the imports to `import type { On, RenderPropsOf } from 'claude-code'` and `import { expect, mock, test } from 'claude-code/testing'`, then append:
 
 ```tsx
 const PROPS = { hasSurvey: false, isWorking: false } as RenderPropsOf['AbovePrompt']
@@ -185,12 +185,12 @@ for (const [why, routines, store, isInteractive] of HIDDEN) {
 }
 ```
 
-- [ ] **Step 3: Run them to verify they fail**
+- [x] **Step 3: Run them to verify they fail**
 
 Run: `claude plugin test .`
 Expected: FAIL on the two `setup band shows once` / `At end of session` tests (0 Buttons, not 2). The `no setup band` tests pass already.
 
-- [ ] **Step 4: Implement** — in `hooks/register.tsx`, below the `handoff` atom:
+- [x] **Step 4: Implement** — in `hooks/register.tsx`, below the `handoff` atom:
 
 ```tsx
 const setupBand = atom({ plugin: 'wrap-buttons', key: 'setupBand' } as const, false)
@@ -248,17 +248,17 @@ Replace the first two lines of the `ui.render` hook body:
 
 (Delete the old `if (card === null || ...) return next(e)` line and the old `const { Box, Button, Text } = ...` line; the wrap-up band JSX below stays as is.)
 
-- [ ] **Step 5: Run tests**
+- [x] **Step 5: Run tests**
 
 Run: `claude plugin test .`
 Expected: PASS, all tests
 
-- [ ] **Step 6: Validate**
+- [x] **Step 6: Validate**
 
 Run: `claude plugin validate .`
 Expected: no errors; lists `session.start`, `turn.complete`, `ui.render` hooks and the `setupBand` state key.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add types/index.d.ts hooks/register.tsx tests/wrap-buttons.test.tsx
@@ -275,7 +275,7 @@ git commit -m "Setup band: offer the wrap-up interview once"
 - Consumes: routine paths and card format from Global Constraints.
 - Produces: command `/wrap-buttons:wrap-up` (args `setup` → interview).
 
-- [ ] **Step 1: Write `skills/wrap-up/SKILL.md`**
+- [x] **Step 1: Write `skills/wrap-up/SKILL.md`**
 
 ````markdown
 ---
@@ -326,17 +326,17 @@ Then say where it was saved and that it can be edited by hand. Stop; do not wrap
 5. **No routine only**: after the card, ask "Want to set up your own wrap-up routine now? It's 5 quick questions." On yes, run the interview above.
 ````
 
-- [ ] **Step 2: Validate**
+- [x] **Step 2: Validate**
 
 Run: `claude plugin validate .`
 Expected: no errors; the skill `wrap-up` is listed.
 
-- [ ] **Step 3: Confirm the command name**
+- [x] **Step 3: Confirm the command name**
 
 Run: `claude --plugin-dir ~/Projects/wrap-buttons -p "/help" 2>/dev/null | grep -i wrap-up` — or start an interactive session with `--plugin-dir` and type `/wrap`.
 Expected: `wrap-buttons:wrap-up`. If the name differs, update `closeSetup` in `hooks/register.tsx`, the Task 2 test expectation, and Global Constraints, rerun `claude plugin test .`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add skills/wrap-up/SKILL.md
@@ -351,9 +351,9 @@ git commit -m "Ship a wrap-up skill with a one-time setup interview"
 - Modify: `README.md` (line "Works with any wrap-up skill...")
 - Modify: `.claude-plugin/plugin.json` (`"version"`)
 
-- [ ] **Step 1: Bump** `"version": "0.1.1"` → `"version": "0.2.0"` in `.claude-plugin/plugin.json`.
+- [x] **Step 1: Bump** `"version": "0.1.1"` → `"version": "0.2.0"` in `.claude-plugin/plugin.json`.
 
-- [ ] **Step 2: Replace** the README line `Works with any wrap-up skill or prompt that ends with a card containing those two strings.` with:
+- [x] **Step 2: Replace** the README line `Works with any wrap-up skill or prompt that ends with a card containing those two strings.` with:
 
 ```markdown
 ## Wrap-up skill
@@ -369,14 +369,14 @@ Yours keeps working. The bundled skill tells Claude to skip it when you have you
 To get the buttons with your own wrap-up, set the two options above to match its card. The marker must be on a heading line (starting with `#`). On the setup band in your first session, press **2** to dismiss it for good.
 ```
 
-- [ ] **Step 3: Update** the Status line's "read the ~70 lines in `hooks/`" to the new count: run `cat hooks/*.ts* | wc -l` and round to the nearest 10.
+- [x] **Step 3: Update** the Status line's "read the ~70 lines in `hooks/`" to the new count: run `cat hooks/*.ts* | wc -l` and round to the nearest 10.
 
-- [ ] **Step 4: Validate and test**
+- [x] **Step 4: Validate and test**
 
 Run: `claude plugin validate . && claude plugin test .`
 Expected: no errors, all tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add README.md .claude-plugin/plugin.json

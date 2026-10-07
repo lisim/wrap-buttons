@@ -1,6 +1,6 @@
 ---
 name: wrap-up
-description: Wrap up the session with a handoff card (Completed, Files Touched, Next Up), following the user's saved routine if they have one. Use when the user says "wrap up", "done for now", "finish", or runs /wrap-up. With the argument "setup", runs the one-time interview that saves their routine.
+description: Wrap up the session with a handoff card (Completed, Files Touched, Next Up), following the user's saved routine if they have one. Use when the user says "wrap up", "done for now", "finish", or runs /wrap-up. With the argument "setup", runs the one-time interview that saves their routine. Skip this skill if the user has another wrap-up skill or wrap-up rules in CLAUDE.md; use theirs instead.
 ---
 
 # Wrap-up

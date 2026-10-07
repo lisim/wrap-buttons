@@ -14,7 +14,7 @@ The band only appears when a reply contains the handoff card, so users without a
 
 ### 1. Skill: `skills/wrap-up/SKILL.md`
 
-One skill, two modes.
+One skill, two modes. Plugin skills are namespaced: the command is `/wrap-buttons:wrap-up` (confirm the exact name once loaded). Shorthand `/wrap-up` below.
 
 **`/wrap-up` (wrap up)**
 1. Look for a routine: `.claude/wrap-up.md` in the project, else `~/.claude/wrap-up.md`. Project wins; no merging.
@@ -43,12 +43,13 @@ Extra fields from the routine go between Files Touched and Next Up. The heading 
 
 ### 2. Setup band (`hooks/register.tsx`)
 
-- On `session.start`, if `e` reports a person at the prompt, and `$.store` key `setupPrompted` is unset, and neither routine file exists (`$.fs.exists`, home from `$.env.get("HOME")`) → show the band.
+- On `session.start`, if `e.isInteractive`, and `$.store` key `setupPrompted` is unset, and neither routine file exists (`$.fs.exists`, home from `$.env.get("HOME")`) → set the `setupBand` atom to `true`.
 - Band: "Set up your wrap-up routine?" with **1 Set up now** · **2 At end of session**.
-  - 1 → hide band, `$.prompt.submit({ text: '/wrap-up setup', asUser: true })`.
+  - 1 → hide band, `$.command.run({ command: 'wrap-buttons:wrap-up', args: 'setup' })` (same call style as `/clear` in `reset`).
   - 2 → hide band. The skill's basic-mode safeguard handles it later.
 - Either button sets `setupPrompted` in `$.store`, so the band shows once ever.
-- Not shown alongside the wrap-up band; the wrap-up band takes priority.
+- Band visibility is a session atom, `setupBand: boolean`, declared in `types/index.d.ts` `PluginState['wrap-buttons']` next to `handoff`.
+- Drawn by the existing `AbovePrompt` hook, keeping its `hasSurvey` / `isWorking` guards: `handoff` set → wrap-up band; else `setupBand` → setup band; else `next(e)`. The wrap-up band takes priority.
 
 ### 3. Strict marker (`hooks/card.ts`)
 
@@ -58,12 +59,16 @@ Extra fields from the routine go between Files Touched and Next Up. The heading 
 
 - Setup band shows on start when no routine and `setupPrompted` unset.
 - Hidden when a routine exists (either location) or `setupPrompted` is set.
-- Button 1 submits `/wrap-up setup`; both buttons set `setupPrompted`.
+- Button 1 runs command `wrap-buttons:wrap-up` with args `setup`; both buttons set `setupPrompted`.
 - Marker mid-sentence → no handoff; marker on a heading → handoff parsed.
+
+## Prerequisite
+
+Commit the in-progress preview change in `hooks/register.tsx` on its own before starting.
 
 ## Docs
 
-- README: replace "works with any wrap-up skill" with a section on `/wrap-up`, basic mode, and `/wrap-up setup`. Note custom wrap-ups still work via the two options, provided the marker is a heading.
+- README: use the namespaced command name throughout. Replace "works with any wrap-up skill" with a section on `/wrap-up`, basic mode, and `/wrap-up setup`. Note custom wrap-ups still work via the two options, provided the marker is a heading.
 - Bump `plugin.json` to 0.2.0.
 
 ## Out of scope

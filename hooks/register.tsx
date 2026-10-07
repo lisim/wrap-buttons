@@ -4,6 +4,22 @@ import type { EngineInterface, Register } from 'claude-code'
 import { carryOver, parseHandoff } from './card'
 
 const handoff = atom({ plugin: 'wrap-buttons', key: 'handoff' } as const, null)
+const setupBand = atom({ plugin: 'wrap-buttons', key: 'setupBand' } as const, false)
+
+// A routine in the project or the home folder means setup is done.
+async function hasRoutine($: EngineInterface, cwd: string) {
+  const home = await $.env.get('HOME')
+  for (const path of [`${cwd}/.claude/wrap-up.md`, ...(home ? [`${home}/.claude/wrap-up.md`] : [])])
+    if (await $.fs.exists(path)) return true
+  return false
+}
+
+// Either button answers the question for good.
+async function closeSetup($: EngineInterface, runSetup: boolean) {
+  await update($, setupBand, () => false)
+  await $.store.set('setupPrompted', true)
+  if (runSetup) await $.command.run({ command: 'wrap-buttons:wrap-up', args: 'setup' })
+}
 
 // Clears the band first: the state may outlive the /clear.
 async function reset($: EngineInterface, carry: 'start' | 'prefill' | 'none', nextLabel: string) {
@@ -20,6 +36,13 @@ export const register: Register = (on, options) => {
   const marker = String(options.marker || 'Session Handoff Card')
   const nextLabel = String(options.nextLabel || 'Next Up')
 
+  on('session.start', async ($, e, next) => {
+    const result = await next(e)
+    if (e.isInteractive && !(await $.store.get('setupPrompted')) && !(await hasRoutine($, e.cwd)))
+      await update($, setupBand, () => true)
+    return result
+  })
+
   on('turn.complete', async ($, e, next) => {
     const found = e.reason === 'answer' ? parseHandoff(e.answer, marker, nextLabel) : null
     if (found) await update($, handoff, () => found)
@@ -28,8 +51,24 @@ export const register: Register = (on, options) => {
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const card = await read($, handoff)
-    if (card === null || e.props.hasSurvey || e.props.isWorking) return next(e)
+    if (e.props.hasSurvey || e.props.isWorking) return next(e)
     const { Box, Button, Text } = $.ui.resolve(e)
+    if (card === null) {
+      if (!(await read($, setupBand))) return next(e)
+      return (
+        <Box flexDirection="column" borderStyle="round" paddingX={1}>
+          <Text bold>👋 Set up your wrap-up routine? Press 1-2</Text>
+          <Box gap={1}>
+            <Box key="b-setup-now" borderStyle="round" borderColor="green" paddingX={1}>
+              <Button key="setup-now" hotkey="1" plain label="Set up now" onPress={() => closeSetup($, true)} />
+            </Box>
+            <Box key="b-setup-later" borderStyle="round" borderColor="blue" paddingX={1}>
+              <Button key="setup-later" hotkey="2" plain label="At end of session" onPress={() => closeSetup($, false)} />
+            </Box>
+          </Box>
+        </Box>
+      )
+    }
     // Border colour per button: green the suggested one, blue Stay, the rest the default.
     return (
       <Box flexDirection="column" borderStyle="round" paddingX={1}>

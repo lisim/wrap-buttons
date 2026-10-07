@@ -34,7 +34,11 @@ export const register: Register = (on, options) => {
     return (
       <Box flexDirection="column" borderStyle="round" paddingX={1}>
         <Text bold>✅ Wrap-up done. Start a fresh session? Press 1-4</Text>
-        {card.next ? <Text>{`${nextLabel}: ${card.next.slice(0, 100)}`}</Text> : null}
+        <Box key="preview" flexDirection="column" borderStyle="round" borderColor="green" paddingX={1}>
+          <Text dimColor>1 sends, 2 drafts, in a fresh session:</Text>
+          <Text bold color="green">{`${nextLabel}: ${card.next || '(none found, the handoff alone)'}`}</Text>
+          <Text dimColor>{`+ the handoff card (${card.card.split('\n').length} lines)`}</Text>
+        </Box>
         <Box gap={1}>
           <Box key="b-start" borderStyle="round" borderColor="green" paddingX={1}>
             <Button key="start" hotkey="1" plain label={`Clear & send ${nextLabel}`} onPress={() => reset($, 'start', nextLabel)} />
